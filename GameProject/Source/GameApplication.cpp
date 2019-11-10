@@ -1,6 +1,6 @@
 
 /// GameEngine
-#include<Core.h>
+#include <Core.h>
 
 class GameApplication : public Application
 {
@@ -11,8 +11,6 @@ public:
 
 
 };
-
-
 
 Application*  CreateApplication()
 {

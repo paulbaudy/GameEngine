@@ -1,3 +1,6 @@
 [submodule "GameEngine/ThirdParties/plog"]
 	path = GameEngine/ThirdParties/plog
 	url = https://github.com/SergiusTheBest/plog
+[submodule "GameEngine/ThirdParties/spdlog"]
+	path = GameEngine/ThirdParties/spdlog
+	url = https://github.com/gabime/spdlog

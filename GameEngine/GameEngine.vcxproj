@@ -15,27 +15,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{96B3495F-0269-C254-8B5D-BC2BF711B958}</ProjectGuid>
+    <ProjectGuid>{D54F7917-C107-BB64-2A0F-94C016E65555}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>GameProject</RootNamespace>
+    <RootNamespace>GameEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGame|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Game|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
@@ -55,47 +55,51 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGame|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\Binaries\DebugGame_windows\GameProject\</OutDir>
-    <IntDir>..\Intermediates\DebugGame_windows\GameProject\</IntDir>
-    <TargetName>GameProject</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\Binaries\DebugGame_windows\GameEngine\</OutDir>
+    <IntDir>..\Intermediates\DebugGame_windows\GameEngine\</IntDir>
+    <TargetName>GameEngine</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Game|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\Binaries\Game_windows\GameProject\</OutDir>
-    <IntDir>..\Intermediates\Game_windows\GameProject\</IntDir>
-    <TargetName>GameProject</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\Binaries\Game_windows\GameEngine\</OutDir>
+    <IntDir>..\Intermediates\Game_windows\GameEngine\</IntDir>
+    <TargetName>GameEngine</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\Binaries\DebugEditor_windows\GameProject\</OutDir>
-    <IntDir>..\Intermediates\DebugEditor_windows\GameProject\</IntDir>
-    <TargetName>GameProject</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\Binaries\DebugEditor_windows\GameEngine\</OutDir>
+    <IntDir>..\Intermediates\DebugEditor_windows\GameEngine\</IntDir>
+    <TargetName>GameEngine</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGame|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BUILD_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\GameEngine\ThirdParties\spdlog\include;..\GameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BUILD_DLL;GE_BUILD_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>ThirdParties\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>..\Binaries\DebugGame_windows\GameEngine\GameEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\Binaries\DebugGame_windows\GameEngine\GameEngine.dll\ (xcopy /Q /E /Y /I ..\Binaries\DebugGame_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul) ELSE (xcopy /Q /Y /I ..\Binaries\DebugGame_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Game|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BUILD_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\GameEngine\ThirdParties\spdlog\include;..\GameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BUILD_DLL;GE_BUILD_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>ThirdParties\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -105,35 +109,47 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>..\Binaries\Game_windows\GameEngine\GameEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\Binaries\Game_windows\GameEngine\GameEngine.dll\ (xcopy /Q /E /Y /I ..\Binaries\Game_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul) ELSE (xcopy /Q /Y /I ..\Binaries\Game_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\GameEngine\ThirdParties\spdlog\include;..\GameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GE_PLATFORM_WINDOWS;GE_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>ThirdParties\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>..\Binaries\DebugEditor_windows\GameEngine\GameEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST ..\Binaries\DebugEditor_windows\GameEngine\GameEngine.dll\ (xcopy /Q /E /Y /I ..\Binaries\DebugEditor_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul) ELSE (xcopy /Q /Y /I ..\Binaries\DebugEditor_windows\GameEngine\GameEngine.dll ..\GameProject &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\GameApplication.h" />
+    <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Core.h" />
+    <ClInclude Include="Source\Events\Event.h" />
+    <ClInclude Include="Source\Events\KeyEvent.h" />
+    <ClInclude Include="Source\Events\MouseEvent.h" />
+    <ClInclude Include="Source\GameEngine.h" />
+    <ClInclude Include="Source\Helpers\Singleton.h" />
+    <ClInclude Include="Source\Log.h" />
+    <ClInclude Include="Source\Main.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\GameApplication.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
-      <Project>{D54F7917-C107-BB64-2A0F-94C016E65555}</Project>
-    </ProjectReference>
+    <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Log.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
